@@ -30,9 +30,9 @@ module.exports = {
             cb(err, data);
         });
     },
-    find: function (condition, pageSize, cb) {
+    find: function (condition, currentPage, pageSize, cb) {
         var pageSize = pageSize;                   //一页多少条
-        var currentPage = 1;                //当前第几页
+        var currentPage = currentPage;                //当前第几页
         var sort = {'commentTime':-1};        //排序（按登录时间倒序）
         var condition = condition;                 //条件
         var skipnum = (currentPage - 1) * pageSize;   //跳过数

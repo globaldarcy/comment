@@ -27,6 +27,25 @@
 <div class="container">
     <div class="list-group" id="allMsg">
     </div>
+    <nav aria-label="Page navigation" class="center-block">
+        <ul class="pagination">
+            <li>
+                <a href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li data-page="1" class="active"><a href="#">1</a></li>
+            <li data-page="2"><a href="#">2</a></li>
+            <li data-page="3"><a href="#">3</a></li>
+            <li data-page="4"><a href="#">4</a></li>
+            <li data-page="5"><a href="#">5</a></li>
+            <li>
+                <a href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
     <div class="alert alert-success alert-dismissible" role="alert" id="success">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <strong>Well done!</strong> You successfully read this important alert message.
@@ -64,20 +83,30 @@
 <script src="/js/underscore.js"></script>
 
 <script type="text/javascript">
-    $.get('/du', function (result) {
-        var compiled = _.template($("#msg").html());
-        $("#allMsg").html("");
-        console.log(result);
-        for(var i = 0; i < result.length; i++){
-            var list = compiled({
-                username:result[i].username,
-                comment:result[i].comment,
-                commentTime:result[i].commentTime,
-                id:result[i]._id
-            });
-            $("#allMsg").append($(list));
-        }
-    });
+    var nowpage = 1;
+    $("[data-page]").on('click', function () {
+        nowpage = parseInt($(this).attr('data-page'));
+        console.log(nowpage);
+        getData(nowpage);
+        $(this).addClass('active').siblings().removeClass('active');
+    })
+    function getData(page) {
+        $.get('/data?page=' + page, function (result) {
+            var compiled = _.template($("#msg").html());
+            $("#allMsg").html("");
+            //console.log(result);
+            for(var i = 0; i < result.length; i++){
+                var list = compiled({
+                    username:result[i].username,
+                    comment:result[i].comment,
+                    commentTime:result[i].commentTime,
+                    id:result[i]._id
+                });
+                $("#allMsg").append($(list));
+            }
+        });
+    }
+    getData(nowpage);
 
 
     $("#submit").click(function () {
@@ -95,6 +124,7 @@
                         $("#userName").val("");
                         $("#comment").val("");
                         $("#success").fadeIn().delay(2000).fadeOut();
+                        getData(nowpage);
                     }
                 }
             );

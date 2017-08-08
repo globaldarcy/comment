@@ -6,8 +6,9 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
-router.get('/du', function (req, res, next) {
-    msg.find({}, 5, function (err, data) {
+router.get('/data', function (req, res, next) {
+    var page = parseInt(req.query.page);
+    msg.find({}, page, 5, function (err, data) {
         if(err){
             next();
         }
