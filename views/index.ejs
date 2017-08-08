@@ -25,6 +25,8 @@
 </head>
 <body>
 <div class="container">
+    <div class="list-group" id="allMsg">
+    </div>
     <div class="alert alert-success alert-dismissible" role="alert" id="success">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <strong>Well done!</strong> You successfully read this important alert message.
@@ -46,12 +48,38 @@
     </form>
 </div>
 
+<script type="text/template" id="msg">
+    <a href="#" class="list-group-item">
+        <h4 class="list-group-item-heading">【姓名】{{= username }}</h4>
+        <p class="list-group-item-text">【内容】{{= comment }}</p>
+        <p class="list-group-item-text">【时间】{{= commentTime }}</p>
+        <p class="list-group-item-text">【id】{{= id }}</p>
+    </a>
+</script>
+
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="/js/jquery.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="/js/bootstrap.min.js"></script>
+<script src="/js/underscore.js"></script>
 
 <script type="text/javascript">
+    $.get('/du', function (result) {
+        var compiled = _.template($("#msg").html());
+        $("#allMsg").html("");
+        console.log(result);
+        for(var i = 0; i < result.length; i++){
+            var list = compiled({
+                username:result[i].username,
+                comment:result[i].comment,
+                commentTime:result[i].commentTime,
+                id:result[i]._id
+            });
+            $("#allMsg").append($(list));
+        }
+    });
+
+
     $("#submit").click(function () {
         if($("#userName").val() != "" && $("#comment").val() != ""){
             $.post('/post',
@@ -60,13 +88,13 @@
                     "comment": $("#comment").val()
                 },
                 function (result) {
-                    console.log(result.data);
+                    //console.log(result.data);
                     if(result.data == -1){
-                        $("#danger").fadeIn();
+                        $("#danger").fadeIn().delay(2000).fadeOut();
                     }else if(result.data == 1){
                         $("#userName").val("");
                         $("#comment").val("");
-                        $("#success").fadeIn();
+                        $("#success").fadeIn().delay(2000).fadeOut();
                     }
                 }
             );

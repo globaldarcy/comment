@@ -6,6 +6,15 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
+router.get('/du', function (req, res, next) {
+    msg.find({}, 5, function (err, data) {
+        if(err){
+            next();
+        }
+        //res.json({"result": data});
+        res.json(data);
+    });
+});
 router.post('/post', function(req, res, next) {
     // var _form = new formidable.IncomingForm();
     // _form.parse(req, function(err, fields, files) {
