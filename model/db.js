@@ -8,7 +8,7 @@ mongoose.Promise = global.Promise;
 /*
 * 连接
 * */
-mongoose.connect();
+mongoose.connect(db_url);
 /*
 * 连接成功
 * */
