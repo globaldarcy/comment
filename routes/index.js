@@ -4,7 +4,13 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+    msg.count({}, function (err, data) {
+       //console.log(data);
+       res.render('index', {
+           title: 'Express',
+           pagination: Math.ceil( data / 5 )
+       });
+    });
 });
 router.get('/data', function (req, res, next) {
     var page = parseInt(req.query.page);
@@ -33,6 +39,18 @@ router.post('/post', function(req, res, next) {
         res.json({"data":1});
     });
     //res.end("");
+});
+
+router.get('/del', function (req, res, next) {
+    var id = req.query.id;
+    msg.del({_id:id}, function (err, data) {
+        if(err){
+            res.send({"data":-1});
+            next();
+        }
+        //console.log("数据库内容: " + data);
+        res.json({"data":1});
+    })
 });
 
 module.exports = router;

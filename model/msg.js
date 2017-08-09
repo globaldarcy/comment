@@ -40,12 +40,34 @@ module.exports = {
         Msg.find(condition).skip(skipnum).limit(pageSize).sort(sort).exec(function (err, data) {
             if (err) {
                 cb(err);
-                console.log("Error:" + err);
+                //console.log("Error:" + err);
             }
             else {
-                console.log("Res:" + data);
+                //console.log("Res:" + data);
                 cb(err, data);
             }
+        })
+    },
+    count: function (condition, cb) {
+        var condition = condition;
+        Msg.count(condition, function (err, data) {
+            if(err){
+                //console.log("Error: " + err);
+                cb(err);
+            }
+            //console.log("Data: " + data);
+            cb(err, data);
+        })
+    },
+    del: function (condition, cb){
+        var condition = condition;
+        Msg.remove(condition, function(err, data){
+            if(err){
+                //console.log("Error: " + err);
+                cb(err);
+            }
+            //console.log("Data: " + data);
+            cb(err, data);
         })
     }
 };
